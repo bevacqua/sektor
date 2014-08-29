@@ -20,24 +20,24 @@ The public API exposed by `sektor` mirrors the API in [Sizzle][1]. This means `s
 
 # Drawbacks
 
-Sektor has a few drawbacks when compared against [Sizzle][1].
+Sektor has a few drawbacks when compared against [Sizzle][1]. The following features are **missing in `sektor`, but available in [Sizzle][1]. If you need any of these, use [Sizzle][1] instead!
 
 * Attribute not equal selector
-* Positional selectors (:first; :eq(n); :odd; etc.)
-* Type selectors (:input; :checkbox; :button; etc.)
-* State-based selectors (:animated; :visible; :hidden; etc.)
-* :has(selector)
-* :not(complex selector)
-* custom selectors via Sizzle extensions
-* Leading combinators (e.g., $collection.find("> *"))
+* Positional selectors (`:first`; `:eq(n)`; `:odd`; etc.)
+* Type selectors (`:input`; `:checkbox`; `:button`; etc.)
+* State-based selectors (`:animated`; `:visible`; `:hidden`; etc.)
+* `:has(selector)`
+* Complex negations `:not(complex selector)`
+* Adding custom selectors via Sizzle extensions
+* Leading combinators (e.g., `collection.find('> *')`)
 * Reliable functionality on XML fragments
 * Requiring all parts of a selector to match elements under context
 
-  >  (e.g., $div.find("div > *") now matches children of $div)
+  >  (e.g., `div.find('div > *')` now matches children of `div`)
 
 * Matching against non-elements
 * Reliable sorting of disconnected nodes
-* querySelectorAll bug fixes (e.g., unreliable :focus on WebKit)
+* `querySelectorAll` bug fixes (e.g., unreliable `:focus` on WebKit)
 
 # License
 
