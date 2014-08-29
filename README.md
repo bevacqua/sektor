@@ -2,7 +2,7 @@
 
 > A slim alternative to jQuery's [Sizzle][1]
 
-Sektor has a smaller footprint than that of [Sizzle][1].
+Sektor has a smaller footprint than that of [Sizzle][1]. Sektor is [**~1kb**][3] minified vs the [**~18kb**][2] in Sizzle.
 
 # Install
 
@@ -44,3 +44,5 @@ Sektor has a few drawbacks when compared against [Sizzle][1]. The following feat
 MIT
 
 [1]: https://github.com/jquery/sizzle
+[2]: https://github.com/jquery/sizzle/blob/master/dist/sizzle.min.js
+[3]: https://github.com/bevacqua/sektor/blob/master/dist/sektor.min.js
