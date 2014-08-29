@@ -2,11 +2,19 @@
 
 var dupe;
 var docElem = window.document.documentElement;
-var matches = docElem.matches ||
-    docElem.webkitMatchesSelector ||
-    docElem.mozMatchesSelector ||
-    docElem.oMatchesSelector ||
-    docElem.msMatchesSelector;
+var domMatches = docElem.matches ||
+                 docElem.webkitMatchesSelector ||
+                 docElem.mozMatchesSelector ||
+                 docElem.oMatchesSelector ||
+                 docElem.msMatchesSelector;
+
+function merge (left, right) {
+  var i;
+  var len = right.length;
+  for (i = 0; i < len; i++) {
+    left.push(right[i]);
+  }
+}
 
 function contains (left, right) {
   var lefty = left.nodeType === 9 ? left.documentElement : left;
@@ -41,13 +49,12 @@ function sortOrder (left, right) {
   return left.compareDocumentPosition ? -1 : 1; // not directly comparable, sort on existence of method
 }
 
-function find (selector, context, results, seed) {
+function find (selector, ctx, collection, seed) {
   var element;
   var nodeType;
+  var results = collection || [];
+  var context = ctx || document;
   var i = 0;
-
-  results = results || [];
-  context = context || document;
 
   if (!selector || typeof selector !== 'string') {
     return results; // same safeguard as Sizzle
@@ -64,7 +71,7 @@ function find (selector, context, results, seed) {
       }
     }
   } else {
-    results.push.apply(results, context.querySelectorAll(selector));
+    merge(results, context.querySelectorAll(selector));
   }
   return results;
 }
@@ -74,7 +81,7 @@ function matches (selector, elements) {
 }
 
 function matchesSelector (element, selector) {
-  return matches(selector, [element]);
+  return domMatches.call(element, selector);
 }
 
 module.exports = find;
