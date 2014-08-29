@@ -1,4 +1,4 @@
-# sektor
+![sektor.png][5]
 
 > A slim alternative to jQuery's [Sizzle][1]
 
@@ -49,3 +49,4 @@ MIT
 [2]: https://github.com/jquery/sizzle/blob/master/dist/sizzle.min.js
 [3]: https://github.com/bevacqua/sektor/blob/master/dist/sektor.min.js
 [4]: https://github.com/bevacqua/dominus
+[5]: https://raw.githubusercontent.com/bevacqua/sektor/master/resources/sektor.png
