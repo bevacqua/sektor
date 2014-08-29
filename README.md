@@ -4,6 +4,8 @@
 
 Sektor has a smaller footprint than that of [Sizzle][1]. Sektor is [**~1kb**][3] minified vs the [**~18kb**][2] in Sizzle.
 
+This is the selector engine used in [Dominus][4].
+
 # Install
 
 ```shell
@@ -46,3 +48,4 @@ MIT
 [1]: https://github.com/jquery/sizzle
 [2]: https://github.com/jquery/sizzle/blob/master/dist/sizzle.min.js
 [3]: https://github.com/bevacqua/sektor/blob/master/dist/sektor.min.js
+[4]: https://github.com/bevacqua/dominus
