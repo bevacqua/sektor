@@ -1,5 +1,10 @@
 'use strict';
 
+var prettyBytes = require('pretty-bytes');
+var gzipSize = require('gzip-size');
+var fs = require('fs');
+var path = require('path');
+var contra = require('contra');
 var gulp = require('gulp');
 var bump = require('gulp-bump');
 var git = require('gulp-git');
@@ -74,6 +79,29 @@ gulp.task('npm', ['tag'], function (done) {
   child.on('error', function () {
     throw new Error('unable to publish');
   });
+});
+
+
+function replaceSize (needle, relative, done) {
+  var file = path.resolve(relative);
+  var data = fs.readFileSync(file);
+  var size = gzipSize.sync(data);
+  var sizeHuman = prettyBytes(size).replace(/\s+/g, '');
+  var readmeFile = path.resolve('./README.md');
+  var readme = fs.readFileSync(readmeFile, { encoding: 'utf8' });
+  var output = readme.replace(needle, '$1**' + sizeHuman + '**$3');
+
+  fs.writeFile(readmeFile, output, { encoding: 'utf8'}, done);
+}
+
+gulp.task('size', function (done) {
+  var sektorNeedle = /(<span>Sektor is \[)(.*)(]\[\d+\]<\/span>)/mig;
+  var sizzleNeedle = /(<span>the \[\*\*)(.*)(\*\*\]\[\d+\] in Sizzle<\/span>)/mig;
+
+  contra.series([
+    contra.curry(replaceSize, sektorNeedle, './dist/sektor.min.js'),
+    contra.curry(replaceSize, sizzleNeedle, './node_modules/sizzle/dist/sizzle.min.js')
+  ], done);
 });
 
 gulp.task('release', ['npm']);

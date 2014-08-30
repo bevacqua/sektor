@@ -16,6 +16,7 @@
   },
   "devDependencies": {
     "browserify": "^4.2.1",
+    "contra": "^1.6.10",
     "gulp": "^3.6.2",
     "gulp-bump": "~0.1.0",
     "gulp-clean": "~0.2.3",
@@ -28,9 +29,12 @@
     "gulp-size": "~0.1.1",
     "gulp-streamify": "0.0.5",
     "gulp-uglify": "~0.1.0",
+    "gzip-size": "^1.0.0",
     "jshint": "~2.4.1",
     "jshint-stylish": "~0.1.5",
     "jshint-tap": "0.0.1",
+    "pretty-bytes": "^1.0.1",
+    "sizzle": "^2.0.0",
     "vinyl-source-stream": "^0.1.1"
   },
   "dependencies": {}

@@ -2,7 +2,7 @@
 
 > A slim alternative to jQuery's [Sizzle][1]
 
-Sektor has a smaller footprint than that of [Sizzle][1]. Sektor is [**~1kb**][3] minified vs the [**~18kb**][2] in Sizzle.
+Sektor has a smaller footprint than that of [Sizzle][1]. <span>Sektor is [**663B**][3]</span> minified and gzipped, vs <span>the [****7.01kB****][2] in Sizzle</span>.
 
 This is the selector engine used in [Dominus][4].
 
