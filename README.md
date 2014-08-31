@@ -28,7 +28,9 @@ Sektor has a few drawbacks when compared against [Sizzle][1]. The following feat
 
 Sektor lacks support for custom state-based selectors popularized by Sizzle, such as `:visible`, `:first`, and so on.
 
-While Sizzle fixes a few cross-browser incompatibilities by providing their own full-blown selection engine, Sektor doesn't. You can check the complete list of cross-browser incompatibilities Sizzle fixes [in their source code][6].
+While [Sizzle][1] fixes a few cross-browser incompatibilities by providing their own full-blown selection engine, Sektor doesn't fix all of them. You can check the complete list of cross-browser incompatibilities Sizzle fixes [in their source code][6].
+
+Sektor _does_ correct the behavior in `.querySelectorAll` [for context-rooted queries][7].
 
 ##### Features I'm glad are missing
 
@@ -54,3 +56,4 @@ MIT
 [4]: https://github.com/bevacqua/dominus
 [5]: https://raw.githubusercontent.com/bevacqua/sektor/master/resources/sektor.png
 [6]: https://github.com/jquery/sizzle/blob/5bc4454a18b859025cbb8480c70bd3b7ec623ac0/src/sizzle.js#L602-L676
+[7]: http://ejohn.org/blog/thoughts-on-queryselectorall/
