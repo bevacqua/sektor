@@ -81,7 +81,6 @@ gulp.task('npm', ['tag'], function (done) {
   });
 });
 
-
 function replaceSize (needle, relative, done) {
   var file = path.resolve(relative);
   var data = fs.readFileSync(file);

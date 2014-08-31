@@ -34,7 +34,7 @@
     "jshint-stylish": "~0.1.5",
     "jshint-tap": "0.0.1",
     "pretty-bytes": "^1.0.1",
-    "sizzle": "^2.0.0",
+    "sizzle": "*",
     "vinyl-source-stream": "^0.1.1"
   },
   "dependencies": {}
