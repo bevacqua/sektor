@@ -29,15 +29,10 @@ var extended = [
 
 var succint = '// <%= pkg.name %>@v<%= pkg.version %>, <%= pkg.license %> licensed. <%= pkg.homepage %>\n';
 
-gulp.task('clean', function () {
-  gulp.src('./dist', { read: false })
-    .pipe(clean());
-});
-
-gulp.task('build', ['clean', 'bump'], function () {
+function build (done) {
   var pkg = require('./package.json');
 
-  return browserify('./src/sektor.js')
+  browserify('./src/sektor.js')
     .bundle({ debug: true, standalone: 'sektor' })
     .pipe(source('sektor.js'))
     .pipe(streamify(header(extended, { pkg : pkg } )))
@@ -46,18 +41,41 @@ gulp.task('build', ['clean', 'bump'], function () {
     .pipe(streamify(uglify()))
     .pipe(streamify(header(succint, { pkg : pkg } )))
     .pipe(streamify(size()))
-    .pipe(gulp.dest('./dist'));
-});
+    .pipe(gulp.dest('./dist'))
+    .on('end', footprint.bind(null, done));
+}
 
-gulp.task('bump', function () {
+function bumpOnly () {
   var bumpType = process.env.BUMP || 'patch'; // major.minor.patch
 
   return gulp.src(['./package.json', './bower.json'])
     .pipe(bump({ type: bumpType }))
     .pipe(gulp.dest('./'));
-});
+}
 
-gulp.task('tag', ['build'], function () {
+function replaceFootprint (needle, relative, done) {
+  var file = path.resolve(relative);
+  var data = fs.readFileSync(file);
+  var size = gzipSize.sync(data);
+  var sizeHuman = prettyBytes(size).replace(/\s+/g, '');
+  var readmeFile = path.resolve('./README.md');
+  var readme = fs.readFileSync(readmeFile, { encoding: 'utf8' });
+  var output = readme.replace(needle, '$1' + sizeHuman + '$3');
+
+  fs.writeFile(readmeFile, output, { encoding: 'utf8'}, done);
+}
+
+function footprint (done) {
+  var sektorNeedle = /(<span>Sektor is \[\*\*)(.*)(\*\*\]\[\d+\]<\/span>)/mig;
+  var sizzleNeedle = /(<span>the \[\*\*)(.*)(\*\*\]\[\d+\] in Sizzle<\/span>)/mig;
+
+  contra.series([
+    contra.curry(replaceFootprint, sektorNeedle, './dist/sektor.min.js'),
+    contra.curry(replaceFootprint, sizzleNeedle, './node_modules/sizzle/dist/sizzle.min.js')
+  ], done);
+}
+
+function tag () {
   var pkg = require('./package.json');
   var v = 'v' + pkg.version;
   var message = 'Release ' + v;
@@ -67,40 +85,21 @@ gulp.task('tag', ['build'], function () {
     .pipe(git.tag(v, message))
     .pipe(git.push('origin', 'master', '--tags'))
     .pipe(gulp.dest('./'));
-});
-
-gulp.task('npm', ['tag'], function (done) {
-  var child = require('child_process').exec('npm publish', {}, function () {
-    done();
-  });
-
-  child.stdout.pipe(process.stdout);
-  child.stderr.pipe(process.stderr);
-  child.on('error', function () {
-    throw new Error('unable to publish');
-  });
-});
-
-function replaceSize (needle, relative, done) {
-  var file = path.resolve(relative);
-  var data = fs.readFileSync(file);
-  var size = gzipSize.sync(data);
-  var sizeHuman = prettyBytes(size).replace(/\s+/g, '');
-  var readmeFile = path.resolve('./README.md');
-  var readme = fs.readFileSync(readmeFile, { encoding: 'utf8' });
-  var output = readme.replace(needle, '$1**' + sizeHuman + '**$3');
-
-  fs.writeFile(readmeFile, output, { encoding: 'utf8'}, done);
 }
 
-gulp.task('size', function (done) {
-  var sektorNeedle = /(<span>Sektor is \[)(.*)(]\[\d+\]<\/span>)/mig;
-  var sizzleNeedle = /(<span>the \[\*\*)(.*)(\*\*\]\[\d+\] in Sizzle<\/span>)/mig;
+function publish (done) {
+  require('child_process').spawn('npm' ['publish'], { stdio: 'inherit' }, done);
+}
 
-  contra.series([
-    contra.curry(replaceSize, sektorNeedle, './dist/sektor.min.js'),
-    contra.curry(replaceSize, sizzleNeedle, './node_modules/sizzle/dist/sizzle.min.js')
-  ], done);
+gulp.task('clean', function () {
+  gulp.src('./dist', { read: false })
+    .pipe(clean());
 });
 
+gulp.task('footprint', footprint);
+gulp.task('build', ['clean'], build);
+gulp.task('bump', bumpOnly);
+gulp.task('bump-build', ['bump'], build);
+gulp.task('tag', ['bump-build'], tag);
+gulp.task('npm', ['tag'], publish);
 gulp.task('release', ['npm']);

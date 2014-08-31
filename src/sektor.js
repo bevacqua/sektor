@@ -1,69 +1,45 @@
 'use strict';
 
-var dupe;
-var docElem = window.document.documentElement;
-var domMatches = docElem.matches ||
-                 docElem.webkitMatchesSelector ||
-                 docElem.mozMatchesSelector ||
-                 docElem.oMatchesSelector ||
-                 docElem.msMatchesSelector;
+var expando = 'sektor-' + Date.now();
+var rsiblings = /[+~]/;
+var document = global.document;
+var del = document.documentElement;
+var match = del.matches ||
+            del.webkitMatchesSelector ||
+            del.mozMatchesSelector ||
+            del.oMatchesSelector ||
+            del.msMatchesSelector;
 
-function merge (left, right) {
-  var i;
-  var len = right.length;
-  for (i = 0; i < len; i++) {
-    left.push(right[i]);
+function qsa (selector, context) {
+  var attributeContext = context === document ? del : context;
+  var existed = attributeContext.getAttribute('id');
+  var id = existed || expando;
+  if (!existed) {
+    attributeContext.setAttribute('id', id);
   }
-}
-
-function contains (left, right) {
-  var lefty = left.nodeType === 9 ? left.documentElement : left;
-  var righty = right && right.parentNode;
-  return left === righty || !!(righty && righty.nodeType === 1 && lefty.contains(righty));
-}
-
-function sortOrder (left, right) {
-  if (left === right) {
-    dupe = true; // flag for duplicate removal
-    return 0;
+  var prefix = '#' + id + ' ';
+  var prefixed = prefix + selector.replace(/,/g, ',' + prefix);
+  var adapter = rsiblings.test(selector) && context.parentNode || context;
+  try {
+    return adapter.querySelectorAll(prefixed);
+  } catch (e) {
+    return [];
+  } finally {
+    if (!existed) { attributeContext.removeAttribute('id'); }
   }
-
-  var compare = right.compareDocumentPosition &&
-                left.compareDocumentPosition &&
-                left.compareDocumentPosition(right);
-
-  if (compare) {
-    if (compare & 1) { // disconnected nodes
-      // choose the first element that is related to our document
-      if (left === document || contains(document, left)) {
-        return -1;
-      }
-      if (right === document || contains(document, right)) {
-        return 1;
-      }
-      return 0; // maintain original order
-    }
-
-    return compare & 4 ? -1 : 1;
-  }
-  return left.compareDocumentPosition ? -1 : 1; // not directly comparable, sort on existence of method
 }
 
 function find (selector, ctx, collection, seed) {
   var element;
-  var nodeType;
-  var results = collection || [];
   var context = ctx || document;
+  var results = collection || [];
   var i = 0;
-
-  if (!selector || typeof selector !== 'string') {
-    return results; // same safeguard as Sizzle
+  if (typeof selector !== 'string') {
+    return results;
   }
-
-  if ((nodeType = context.nodeType) !== 1 && nodeType !== 9) {
-    return []; // short-circuit if context is not an element or document
+  if (context.nodeType !== 1 && context.nodeType !== 9) {
+    return []; // bail if context is not an element or document
   }
-
   if (seed) {
     while ((element = seed[i++])) {
       if (matchesSelector(element, selector)) {
@@ -71,7 +47,7 @@ function find (selector, ctx, collection, seed) {
       }
     }
   } else {
-    merge(results, context.querySelectorAll(selector));
+    results.push.apply(results, qsa(selector, context));
   }
   return results;
 }
@@ -81,7 +57,7 @@ function matches (selector, elements) {
 }
 
 function matchesSelector (element, selector) {
-  return domMatches.call(element, selector);
+  return match.call(element, selector);
 }
 
 module.exports = find;

@@ -2,7 +2,7 @@
 
 > A slim alternative to jQuery's [Sizzle][1]
 
-Sektor has a smaller footprint than that of [Sizzle][1]. <span>Sektor is [**663B**][3]</span> minified and gzipped, vs <span>the [****7.01kB****][2] in Sizzle</span>.
+Sektor has a smaller footprint than that of [Sizzle][1]. <span>Sektor is [**810B**][3]</span> minified and gzipped, vs <span>the [**7.01kB**][2] in Sizzle</span>.
 
 This is the selector engine used in [Dominus][4].
 
@@ -22,24 +22,27 @@ The public API exposed by `sektor` mirrors the API in [Sizzle][1]. This means `s
 
 # Drawbacks
 
-Sektor has a few drawbacks when compared against [Sizzle][1]. The following features are **missing in `sektor`, but available in [Sizzle][1]. If you need any of these, use [Sizzle][1] instead!
+Sektor has a few drawbacks when compared against [Sizzle][1]. The following features are **missing in `sektor`, but available in [Sizzle][1]. If you want any of these, use [Sizzle][1] instead!
+
+##### Missing features
+
+Sektor lacks support for custom state-based selectors popularized by Sizzle, such as `:visible`, `:first`, and so on.
+
+While Sizzle fixes a few cross-browser incompatibilities by providing their own full-blown selection engine, Sektor doesn't. You can check the complete list of cross-browser incompatibilities Sizzle fixes [in their source code][6].
+
+##### Features I'm glad are missing
+
+I consider these "features" bloat, and thus they aren't implemented in `sektor`.
 
 * Attribute not equal selector
 * Positional selectors (`:first`; `:eq(n)`; `:odd`; etc.)
 * Type selectors (`:input`; `:checkbox`; `:button`; etc.)
-* State-based selectors (`:animated`; `:visible`; `:hidden`; etc.)
 * `:has(selector)`
 * Complex negations `:not(complex selector)`
 * Adding custom selectors via Sizzle extensions
-* Leading combinators (e.g., `collection.find('> *')`)
 * Reliable functionality on XML fragments
-* Requiring all parts of a selector to match elements under context
-
-  >  (e.g., `div.find('div > *')` now matches children of `div`)
-
 * Matching against non-elements
 * Reliable sorting of disconnected nodes
-* `querySelectorAll` bug fixes (e.g., unreliable `:focus` on WebKit)
 
 # License
 
@@ -50,3 +53,4 @@ MIT
 [3]: https://github.com/bevacqua/sektor/blob/master/dist/sektor.min.js
 [4]: https://github.com/bevacqua/dominus
 [5]: https://raw.githubusercontent.com/bevacqua/sektor/master/resources/sektor.png
+[6]: https://github.com/jquery/sizzle/blob/5bc4454a18b859025cbb8480c70bd3b7ec623ac0/src/sizzle.js#L602-L676
