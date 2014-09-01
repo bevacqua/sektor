@@ -11,8 +11,7 @@ var match = del.matches ||
             del.msMatchesSelector;
 
 function qsa (selector, context) {
-  var existed, id, prefix, prefixed, adapter;
-  var hack = context !== document;
+  var existed, id, prefix, prefixed, adapter, hack = context !== document;
   if (hack) { // id hack for context-rooted queries
     existed = context.getAttribute('id');
     id = existed || expando;
