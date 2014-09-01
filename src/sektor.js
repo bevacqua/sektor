@@ -11,21 +11,22 @@ var match = del.matches ||
             del.msMatchesSelector;
 
 function qsa (selector, context) {
-  var attributeContext = context === document ? del : context;
-  var existed = attributeContext.getAttribute('id');
-  var id = existed || expando;
-  if (!existed) {
-    attributeContext.setAttribute('id', id);
+  var existed, id, prefix, prefixed, adapter;
+  var hack = context !== document;
+  if (hack) { // id hack for context-rooted queries
+    existed = context.getAttribute('id');
+    id = existed || expando;
+    prefix = '#' + id + ' ';
+    prefixed = prefix + selector.replace(/,/g, ',' + prefix);
+    adapter = rsiblings.test(selector) && context.parentNode || context;
+    if (!existed) { context.setAttribute('id', id); }
   }
-  var prefix = '#' + id + ' ';
-  var prefixed = prefix + selector.replace(/,/g, ',' + prefix);
-  var adapter = rsiblings.test(selector) && context.parentNode || context;
   try {
-    return adapter.querySelectorAll(prefixed);
+    return (adapter || context).querySelectorAll(prefixed || selector);
   } catch (e) {
     return [];
   } finally {
-    if (!existed) { attributeContext.removeAttribute('id'); }
+    if (existed === null) { context.removeAttribute('id'); }
   }
 }
 
