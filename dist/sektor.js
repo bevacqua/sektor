@@ -1,6 +1,6 @@
 /**
  * sektor - A slim alternative to jQuery's Sizzle
- * @version v1.0.9
+ * @version v1.1.0
  * @link https://github.com/bevacqua/sektor
  * @license MIT
  */
