@@ -88,7 +88,7 @@ function tag () {
 }
 
 function publish (done) {
-  require('child_process').spawn('npm' ['publish'], { stdio: 'inherit' }, done);
+  require('child_process').exec('npm publish', { stdio: 'inherit' }, done);
 }
 
 gulp.task('clean', function () {
@@ -101,5 +101,5 @@ gulp.task('build', ['clean'], build);
 gulp.task('bump', bumpOnly);
 gulp.task('bump-build', ['bump'], build);
 gulp.task('tag', ['bump-build'], tag);
-gulp.task('npm', ['tag'], publish);
-gulp.task('release', ['npm']);
+gulp.task('npm', publish);
+gulp.task('release', ['tag', 'npm']);
