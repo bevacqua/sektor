@@ -17,7 +17,7 @@ function qsa (selector, context) {
     id = existed || expando;
     prefix = '#' + id + ' ';
     prefixed = prefix + selector.replace(/,/g, ',' + prefix);
-    adapter = rsiblings.test(selector) && context.parentNode || context;
+    adapter = rsiblings.test(selector) && context.parentNode;
     if (!existed) { context.setAttribute('id', id); }
   }
   try {
