@@ -1,3 +1,7 @@
+# 1.1.1 Short Circuit
+
+- Less bytes
+
 # 1.1.0 Query Major
 
 - Addressed an issue where `.querySelectorAll` would return elements incorrectly when passing a context root
