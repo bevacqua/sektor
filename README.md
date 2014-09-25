@@ -22,7 +22,7 @@ The public API exposed by `sektor` mirrors the API in [Sizzle][1]. This means `s
 
 # Drawbacks
 
-Sektor has a few drawbacks when compared against [Sizzle][1]. The following features are **missing in `sektor`, but available in [Sizzle][1]. If you want any of these, use [Sizzle][1] instead!
+Sektor has a few drawbacks when compared against [Sizzle][1]. The following features are **missing in `sektor`, but available in [Sizzle][1]**. If you want any of these, use [Sizzle][1] instead!
 
 ##### Missing features
 
