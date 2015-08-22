@@ -1,3 +1,7 @@
+# 1.1.3 Mortal Kombat 2
+
+- Sektor now exports an empty API on the server-side, instead of throwing
+
 # 1.1.1 Short Circuit
 
 - Less bytes
