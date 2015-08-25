@@ -3,15 +3,20 @@
 var expando = 'sektor-' + Date.now();
 var rsiblings = /[+~]/;
 var document = global.document;
-if (!document) {
-  return;
-}
-var del = document.documentElement;
-var match = del.matches ||
-            del.webkitMatchesSelector ||
-            del.mozMatchesSelector ||
-            del.oMatchesSelector ||
-            del.msMatchesSelector;
+var del = document.documentElement || {};
+var match = (
+  del.matches ||
+  del.webkitMatchesSelector ||
+  del.mozMatchesSelector ||
+  del.oMatchesSelector ||
+  del.msMatchesSelector ||
+  never
+);
+
+module.exports = sektor;
+
+sektor.matches = matches;
+sektor.matchesSelector = matchesSelector;
 
 function qsa (selector, context) {
   var existed, id, prefix, prefixed, adapter, hack = context !== document;
@@ -32,7 +37,7 @@ function qsa (selector, context) {
   }
 }
 
-function find (selector, ctx, collection, seed) {
+function sektor (selector, ctx, collection, seed) {
   var element;
   var context = ctx || document;
   var results = collection || [];
@@ -56,14 +61,11 @@ function find (selector, ctx, collection, seed) {
 }
 
 function matches (selector, elements) {
-  return find(selector, null, null, elements);
+  return sektor(selector, null, null, elements);
 }
 
 function matchesSelector (element, selector) {
   return match.call(element, selector);
 }
 
-module.exports = find;
-
-find.matches = matches;
-find.matchesSelector = matchesSelector;
+function never () { return false; }
