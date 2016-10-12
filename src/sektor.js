@@ -3,7 +3,7 @@
 var expando = 'sektor-' + Date.now();
 var rsiblings = /[+~]/;
 var document = global.document;
-var del = document.documentElement || {};
+var del = (document && document.documentElement) || {};
 var match = (
   del.matches ||
   del.webkitMatchesSelector ||
